@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+         {{ category.description|truncatewords:155 }}
+    {% else %}
+         Organic specialities right from farm to the table!
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+         {{ category.name }} - Srey's Shoppiee
+    {% else %}
+         Organic Freshness
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div class="row my_row">
+    <div class="mx-auto">
+        <p>
+            <a class="text-center my_semi_title" href="{% url 'shop1:allProdCat' %}" >
+                <center>View all products</center>
+            </a>
+        </p>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row">
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+    <br>
+<div>
+    <h2 class="text-center my_title">{{category.name}}</h2>
+    <p class="text-justify ">{{category.description}}</p>
+</div>
+</div>
+</div>
+    {% else %}
+<div>
+    <img class="my_image" src="{% static 'img/banner.png' %}" alt="Noooo banner image :/">
+</div>
+<br>
+<div>
+    <h3 class="text-center my_title">Our Product Collections</h3>
+    <p class="text-center">Shop a Wide Range of Home Products from Top Brands. Shop now! Choose from a Wide Range of Top Quality Products at the Best Prices.</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-3 xol-lg-4">
+            <div class="card" style="width: 18rem; height: 24rem;">
+  <a href="{{product.get_url}}"><img src="{{product.image.url}} " alt="{{product.name}}" width="480px" height="190px;" class="card-img-top"></a>
+  <div class="card-body">
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.price}}</p>
+    <a href="{{product.get_url}}" class="btn btn-success">BUY NOW</a>
+  </div>
+</div>
+<!--            <div class="row">-->
+<!--                <a href="{{product.get_url}}"><img src="{{product.image.url}}" alt="{{product.name}}" width="480px" height="320px;"></a>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <h5>{{product.name}}</h5>-->
+<!--                <p>{{product.price}}</p>-->
+<!--            </div>-->
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+             {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+     </div>
+    <br><br>
+</div>
+{% endblock %}
